@@ -1,0 +1,56 @@
+import React from 'react';
+import { Redirect, Link } from 'react-router-dom';
+import axios from 'axios';
+import Form from './Form';
+
+class Dashboard extends React.Component {
+  state = { menu_items: [] }
+
+  componentDidMount() {
+    axios.get('/api/menu_items')
+      .then( res => this.setState({ menu_items: res.data }) )
+  }
+
+  render() {
+      return (
+        <ul>
+          { menu_items.map( p =>
+              <li key={p.id}>
+                <Link to={`/menu_items/${p.id}`}>{p.name}</Link>
+              </li>
+            )
+          }
+        </ul>
+      )
+  }
+}
+
+export default Menu;
+
+in app js
+
+import MenuItem from './components/MenuItem'
+
+
+navbar
+import React from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
+
+const styles = {
+  active: {
+    textDecoration: 'none',
+    fontWeight: 'bold',
+    color: 'black',
+  }
+}
+
+const NavBar = () => (
+  <nav>
+    <NavLink exact activeStyle={styles.active} to="/">Home</NavLink>
+    {' '}
+    <NavLink activeStyle={styles.active} to="/about">About</NavLink>
+    <NavLink activeStyle={styles.active} to="/menu">Menu</NavLink>
+  </nav>
+)
+
+export default withRouter(NavBar);

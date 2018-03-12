@@ -11,8 +11,8 @@ class Form extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    let product = { ...this.state }
-    this.props.submit(product)
+    let menu = { ...this.state }
+    this.props.submit(menu)
     this.setState({ ...this.defaultValues })
   }
 

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Form from './Form';
 
 class Menu extends React.Component {
-  state = { menus: [] }
+  state = { menu_items: [] }
 
   componentDidMount() {
     axios.get('/api/menu_items')
@@ -12,9 +11,17 @@ class Menu extends React.Component {
   }
 
   render() {
-      return (
-        <h1>Menu</h1>
-      )
+    const { menu_items } = this.state;
+     return(
+      <ul>
+        { menu_items.map( m =>
+            <li key={m.id}>
+              <Link to={`/menu_items/${m.id}`}>{m.name}</Link>
+            </li>
+          )
+        }
+      </ul>
+    ) 
   }
 }
 

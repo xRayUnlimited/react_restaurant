@@ -1,0 +1,90 @@
+import React from 'react';
+import axios from 'axios';
+import Form from './Form';
+
+class Menu extends React.Component {
+  state = { menu: {}, edit: false }
+
+  componentDidMount() {
+    const { match: { params: { id } } } = this.props
+    axios.get(`/api/menus/${id}`)
+      .then( res => this.setState({ menu: res.data }) )
+  }
+
+  toggleEdit = () => {
+    this.setState( state => {
+      return { edit: !state.edit }
+    })
+  }
+
+  submit = (menu) => {
+    axios.put(`/api/menus/${this.props.match.params.id}`)
+      .then( res => this.setState({ menu: res.data, edit: false }))
+  }
+
+  show = () => {
+    const { menu: { name, description, price, department}} = this.state
+    return (
+      <div>
+        <h1>{name}</h1>
+        <h3>{description}</h3>
+        <h3>${price}</h3>
+      </div>
+    )
+  }
+
+  edit = () => {
+    const { menu } = this.state
+    return <Form submit={this.submit} {...menu} />
+  }
+
+  render() {
+    const { edit } = this.state
+    return (
+      <div>
+        { edit ? this.edit() : this.show() }
+        <button onClick={this.toggleEdit}>
+          { edit ? 'Cancel' : 'Edit' }
+        </button>
+      </div>
+    )
+  }
+}
+
+export default Menu;
+
+
+menu  form = () => {
+    return <Form submit={this.submit} />
+  }
+
+  toggleForm = () => {
+    this.setState( state => {
+      return { showForm: !state.showForm }
+    })
+  }
+
+  submit = (menu) => {
+    const { menu_items } = this.state
+    axios.post('/api/menus', { menu })
+      .then( res => {
+        this.setState({
+          menu: [res.data, ...menu],
+          showForm: false
+        })
+      })
+  }
+
+  render() {
+    const { showForm } = this.state;
+    return (
+      <div>
+        <h2>Menu</h2>
+        <button onClick={this.toggleForm}>
+          { showForm ? 'Hide' : 'Show' } 
+        </button>
+        { showForm ? this.form() : this.show() }
+      </div>
+    )
+  }
+}
